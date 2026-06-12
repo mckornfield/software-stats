@@ -11,7 +11,8 @@ single self-contained HTML report.
 - `src/usa_data.py`   — Embedded BLS OES 2023 salary + employment + growth data
 - `src/india_data.py` — Embedded NASSCOM/MOSPI 2023 data (INR)
 - `src/china_data.py` — Embedded NBS 2023 sector wage data (CNY)
-- `src/ppp_data.py`   — IMF 2023 PPP conversion factors; to_ppp_usd(amount, country)
+- `src/ppp_data.py`   — IMF 2023 PPP + market FX factors; to_ppp_usd / to_usd_nominal
+- `src/sector_data.py` — economy-wide employment by sector per country (2023); get_sector_employment(country)
 - `data/raw/`         — Provenance-only fetch scripts (no runtime dependency)
 - `data/processed/`   — merged_usa_data.csv, merged_india_data.csv, merged_china_data.csv
 - `notebooks/`        — 20 notebooks in 5 thematic sections
