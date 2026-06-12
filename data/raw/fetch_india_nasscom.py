@@ -1,22 +1,50 @@
 """
-Fetch India IT/job market salary data.
+Emit the India NASSCOM/MOSPI source tables as raw CSVs.
 
-Primary sources:
-  NASSCOM Strategic Review 2023 (annual IT sector report)
-    URL: https://nasscom.in/knowledge-center/publications/
-    Key stats: ~5.43M employees in IT-BPM, average salary ~₹1.2M/year
+Sources:
+  NASSCOM Strategic Review 2023 (IT-BPM sector: ~5.43M employees, avg ~Rs1.2M/yr)
+    https://nasscom.in/knowledge-center/publications/
+  MOSPI Periodic Labour Force Survey (PLFS) 2022-23 (sector employment, earnings)
+    https://mospi.gov.in/plfs-annual-report
+  Non-IT role salaries: PayScale India 2023, ASSOCHAM healthcare survey,
+    Bar Council of India statistics.
 
-  MOSPI Periodic Labour Force Survey (PLFS) 2022-23
-    URL: https://mospi.gov.in/plfs-annual-report
-    Key stats: employment by sector, weekly earnings by occupation
+The figures are curated into src/india_data.py (INR). Running this script writes
+them back out as flat CSVs under data/raw/ so the as-sourced tables are
+inspectable on disk.
 
-  Salary data for non-IT roles sourced from:
-    - PayScale India Salary Report 2023: https://www.payscale.com/research/IN/
-    - ASSOCHAM Healthcare Salary Survey 2023
-    - Bar Council of India statistics
+Market FX: 82.6 INR/USD; PPP: 22 INR/PPP USD (IMF WEO 2023).
 
-To refresh:
-  Update _INDIA_SALARIES and _INDIA_GROWTH in src/india_data.py
-  PPP factor for India (22.0 INR/PPP USD) from IMF WEO 2023:
-    https://www.imf.org/en/Publications/WEO/weo-database/2023/April
+Run: python data/raw/fetch_india_nasscom.py
 """
+
+import sys
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent.parent.parent
+sys.path.insert(0, str(ROOT / "src"))
+
+import pandas as pd
+from india_data import (
+    _INDIA_SALARIES, _INDIA_SALARY_COLS,
+    _INDIA_GROWTH, _INDIA_GROWTH_COLS,
+)
+
+OUT_DIR = ROOT / "data" / "raw"
+
+
+def main():
+    salaries = pd.DataFrame(_INDIA_SALARIES, columns=_INDIA_SALARY_COLS)
+    growth = pd.DataFrame(_INDIA_GROWTH, columns=_INDIA_GROWTH_COLS)
+
+    sal_path = OUT_DIR / "india_salaries_2023.csv"
+    grw_path = OUT_DIR / "india_growth_2019_2023.csv"
+    salaries.to_csv(sal_path, index=False)
+    growth.to_csv(grw_path, index=False)
+
+    print(f"Wrote {len(salaries)} salary rows to {sal_path}")
+    print(f"Wrote {len(growth)} growth rows to {grw_path}")
+
+
+if __name__ == "__main__":
+    main()

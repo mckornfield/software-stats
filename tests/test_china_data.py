@@ -27,6 +27,18 @@ def test_swe_mid_salary():
     assert swe_mid.iloc[0]["median_salary_local"] == 200_000
 
 
+def test_swe_mid_nominal_usd():
+    df = get_merged_china_data()
+    swe_mid = df[(df["role"] == "software_engineer") & (df["career_stage"] == "mid")]
+    # 200_000 CNY / 7.08 = ~28249 nominal USD
+    assert abs(swe_mid.iloc[0]["median_salary_usd"] - 28249) < 100
+
+
+def test_nominal_usd_below_ppp_usd():
+    df = get_merged_china_data()
+    assert (df["median_salary_usd"] < df["median_salary_ppp_usd"]).all()
+
+
 def test_no_null_salaries():
     df = get_merged_china_data()
     assert df["median_salary_local"].notna().all()

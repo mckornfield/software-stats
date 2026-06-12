@@ -7,7 +7,7 @@ from usa_data import get_merged_usa_data
 
 EXPECTED_COLS = {
     "role", "sector", "career_stage", "median_salary_local", "median_salary_ppp_usd",
-    "employed_thousands", "yoy_wage_growth_pct",
+    "median_salary_usd", "employed_thousands", "yoy_wage_growth_pct",
     "wage_2019", "wage_2020", "wage_2021", "wage_2022", "wage_2023",
     "emp_2019", "emp_2020", "emp_2021", "emp_2022", "emp_2023",
     "country",
@@ -39,6 +39,11 @@ def test_swe_mid_salary():
 def test_ppp_usd_equals_local_for_usa():
     df = get_merged_usa_data()
     assert (df["median_salary_local"] == df["median_salary_ppp_usd"]).all()
+
+
+def test_nominal_usd_equals_local_for_usa():
+    df = get_merged_usa_data()
+    assert (df["median_salary_local"] == df["median_salary_usd"]).all()
 
 
 def test_no_null_salaries():

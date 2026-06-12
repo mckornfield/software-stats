@@ -28,6 +28,18 @@ def test_swe_mid_ppp_usd():
     assert abs(swe_mid.iloc[0]["median_salary_ppp_usd"] - 54545) < 100
 
 
+def test_swe_mid_nominal_usd():
+    df = get_merged_india_data()
+    swe_mid = df[(df["role"] == "software_engineer") & (df["career_stage"] == "mid")]
+    # 1_200_000 INR / 82.6 = ~14528 nominal USD
+    assert abs(swe_mid.iloc[0]["median_salary_usd"] - 14528) < 100
+
+
+def test_nominal_usd_below_ppp_usd():
+    df = get_merged_india_data()
+    assert (df["median_salary_usd"] < df["median_salary_ppp_usd"]).all()
+
+
 def test_no_null_salaries():
     df = get_merged_india_data()
     assert df["median_salary_local"].notna().all()

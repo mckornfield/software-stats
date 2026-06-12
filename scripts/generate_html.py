@@ -114,7 +114,8 @@ def extract_outputs(nb_path: Path) -> str:
                             f"<script>Plotly.newPlot('{div_id}', {fig_json});</script>"
                         )
                     elif "text/html" in data:
-                        parts.append("".join(data["text/html"]))
+                        table_html = "".join(data["text/html"])
+                        parts.append(f'<div class="table-wrap">{table_html}</div>')
     return "\n".join(parts)
 
 
@@ -155,6 +156,11 @@ def build_html(sections: list) -> str:
   nav a:hover {{ text-decoration: underline; }}
   pre {{ background: #f5f5f5; padding: 12px; border-radius: 4px; overflow-x: auto; }}
   li {{ margin: 4px 0; }}
+  .table-wrap {{ overflow-x: auto; max-width: 100%; margin: 12px 0; }}
+  .table-wrap table {{ border-collapse: collapse; font-size: 0.8em; }}
+  .table-wrap th, .table-wrap td {{ border: 1px solid #ddd; padding: 3px 8px;
+         text-align: right; white-space: nowrap; }}
+  .table-wrap th {{ background: #f0f4f8; }}
 </style>
 </head>
 <body>

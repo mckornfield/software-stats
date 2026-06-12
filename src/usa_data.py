@@ -10,7 +10,7 @@ Source: https://www.bls.gov/oes/
 """
 
 import pandas as pd
-from ppp_data import to_ppp_usd
+from ppp_data import to_ppp_usd, to_usd_nominal
 
 # (role, sector, career_stage, median_salary_usd)
 # BLS SOC codes: software_engineer=15-1252, lawyer=23-1011,
@@ -79,6 +79,9 @@ def get_merged_usa_data() -> pd.DataFrame:
     df = sal.merge(grw, on="role", how="left")
     df["median_salary_ppp_usd"] = df["median_salary_local"].apply(
         lambda x: to_ppp_usd(x, "USA")
+    )
+    df["median_salary_usd"] = df["median_salary_local"].apply(
+        lambda x: to_usd_nominal(x, "USA")
     )
     df["employed_thousands"] = df["emp_2023"]
     df["yoy_wage_growth_pct"] = (

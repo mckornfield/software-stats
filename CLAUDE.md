@@ -51,6 +51,13 @@ software_engineer, lawyer, physician, financial_analyst, registered_nurse,
 civil_engineer, construction_laborer, farm_worker, manufacturing_worker, retail_worker
 
 ## Common CSV Schema
-role, sector, career_stage, median_salary_local, median_salary_ppp_usd,
+role, sector, career_stage, median_salary_local,
+median_salary_ppp_usd (local buying power, IMF PPP), median_salary_usd (market FX),
 employed_thousands, yoy_wage_growth_pct,
 wage_2019..wage_2023, emp_2019..emp_2023, country
+
+## Currency conventions
+- `median_salary_usd` — market exchange rate (82.6 INR, 7.08 CNY per USD). "What the paycheck converts to."
+- `median_salary_ppp_usd` — PPP-adjusted (22 INR, 4.1 CNY per PPP USD). "Local buying power." Already reflects cost of living.
+- Per-country pay charts use market USD; cross-country comparisons use PPP USD. No raw INR/CNY in charts.
+- `src/ppp_data.py` exposes `to_usd_nominal()` and `to_ppp_usd()`.
